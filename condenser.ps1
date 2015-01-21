@@ -7,17 +7,17 @@ Param(
     [Parameter(ValueFromPipelineByPropertyName=$true)] $serverid = $null
 )
 
-if ($PSVersionTable -eq $null)
+if (($PSVersionTable -eq $null) -or (($PSVersionTable.PSVersion | Select-Object Major).Major -lt 4))
 {
-    Write-Output "","[ERROR] Please upgrade to Powershell v3.0 or newer",""
-    exit
-}
-
-$ps_major_version = ($PSVersionTable.PSVersion | Select-Object Major).Major
-
-if ($ps_major_version -lt 3)
-{
-    Write-Output "","[ERROR] Please upgrade to Powershell v3.0 or newer",""
+    if (-not (Test-Path 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full'))
+    {
+        Write-Output ""
+        Write-Warning "Please upgrade to .NET Framework v4.5"
+        Write-Output "","http://www.microsoft.com/en-us/download/details.aspx?id=30653",""
+    }
+    Write-Output ""
+    Write-Warning "Please upgrade to Powershell v4.0"
+    Write-Output "","http://www.microsoft.com/en-us/download/details.aspx?id=40855",""
     exit
 }
 
